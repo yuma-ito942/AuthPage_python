@@ -8,6 +8,34 @@
 </head>
 
 <body>
-    {{session}}
+    <fieldset>
+        <legend>Profile</legend>
+        <label for="">
+            Name:
+            <input type="text" value="{{session.name}}">
+        </label>
+        <label for="">
+            Email:
+            <input type="text" value="{{session.email}}">
+        </label>
+        <label for="">
+            Password:
+            <input type="password" value="{{session.password}}">
+        </label>
+    </fieldset>
+    <a href="/">
+        <button onclick="logout()">Log Out</button>
+    </a>
+    <script>
+        function logout() {
+            fetch(
+                "logout", { method: 'GET' }
+            )
+                .then(res => console.log(res))
+                .catch(err => console.log("err"))
+            // location.reload()
+        }
+    </script>
 </body>
+
 </html>

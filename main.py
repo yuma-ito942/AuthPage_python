@@ -5,7 +5,6 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "change-this-secret-key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -22,11 +21,13 @@ with app.app_context():
 
 @app.route("/dashboard")
 def dashboard():
-    print("session",session)
-    return render_template(
-        "dashboard.html",
-        session = session
-    )
+    if session: 
+        return render_template(
+            "dashboard.html",
+            session = session
+        )
+    else:
+        return redirect(url_for('indexPage'))
 
 @app.route("/")
 def indexPage():
@@ -44,13 +45,14 @@ def loginAuth():
                 session['email'] = user.email
                 session['name'] = user.name
                 session['password'] = user.password
+                flash("Login success")
                 return redirect(url_for("dashboard"))
         flash("Invalid email or password.")
 
     return render_template("login.html")
 
 @app.route("/register",methods = ['GET','POST'])
-def registerAuth():
+def registerAuth(): 
     name = request.form.get("name")
     email = request.form.get("email")
     password = request.form.get("password") 
@@ -67,6 +69,10 @@ def registerAuth():
             
     return render_template("register.html")
 
+@app.route("/logout",methods = ['GET'])
+def logout():
+    session.clear() 
+    return redirect(url_for("indexPage"))
 
 
 if __name__ == "__main__":
