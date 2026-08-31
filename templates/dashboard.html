@@ -8,20 +8,26 @@
 </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+    {{messages}}
+    {% endwith %}
     <fieldset>
         <legend>Profile</legend>
-        <label for="">
-            Name:
-            <input type="text" value="{{session.name}}">
-        </label>
-        <label for="">
-            Email:
-            <input type="text" value="{{session.email}}">
-        </label>
-        <label for="">
-            Password:
-            <input type="password" value="{{session.password}}">
-        </label>
+        <form action="/profile" method="post">
+            <label for="">
+                Name:
+                <input type="text" value="{{session.name}}" name="name">
+            </label>
+            <label for="">
+                Email:
+                <input type="text" value="{{session.email}}" name="email">
+            </label>
+            <label for="">
+                Password:
+                <input type="password" value="{{session.password}}" name="password">
+            </label>
+            <button type="submit">Update Profile</button>
+        </form>
     </fieldset>
     <a href="/">
         <button onclick="logout()">Log Out</button>

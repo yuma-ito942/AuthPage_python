@@ -74,6 +74,24 @@ def logout():
     session.clear() 
     return redirect(url_for("indexPage"))
 
+@app.route("/profile",methods = ["POST"])
+def updateProfile():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    password = request.form.get("password")
+ 
+    if request.method == 'POST':
+        user = User.query.filter_by(email = email).first()
+        if user:
+            user.name = name
+            user.password = password
+            session['user_id'] = user.id
+            session['email'] = user.email
+            session['name'] = user.name
+            session['password'] = user.password
+            flash("Profile updated successfully")
+            return redirect(url_for("dashboard")) 
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
