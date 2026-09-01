@@ -29,10 +29,43 @@
             <button type="submit">Update Profile</button>
         </form>
     </fieldset>
+
+    {% if session.avatar %}
+    <img src="{{ url_for('static', filename='uploads/' + session.avatar) }}" width="120" height="120"
+        style="border-radius: 50%; object-fit: cover;">
+    {% else %}
+    <p>No avatar uploaded.</p>
+    {% endif %}
+    <form method="POST" action="{{ url_for('change_avatar') }}" enctype="multipart/form-data">
+
+        <input type="file" name="avatar" accept="image/png,image/jpeg,image/webp" required>
+
+        <button type="submit">
+            Change Avatar
+        </button>
+
+    </form>
+
+    <!-- <form action="" method="POST" action="{{url_for('remove_avatar')}}"> -->
+        <button onclick="removeAvatar()">Remove</button>
+    <!-- </form> -->
+
+
     <a href="/">
         <button onclick="logout()">Log Out</button>
     </a>
     <script>
+        function removeAvatar() {
+            fetch(
+                "{{url_for('remove_avatar')}}",
+                { method: "DELETE" }
+            )
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
+            location.reload()
+        }
+
+
         function logout() {
             fetch(
                 "logout", { method: 'GET' }
